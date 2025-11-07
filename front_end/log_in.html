@@ -1,29 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Page</title>
-  <link rel="stylesheet" href="../style/log_in.css">
-   
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paoli Group | Log In</title>
+    <link rel="stylesheet" href="/style/log_in.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="header-gradient"></div>
+      <button class="menu-toggle" aria-label="Open navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
 
-  <div class="login-container">
-    <h2>Login</h2>
-    <form action="/login" method="POST">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" placeholder="Enter username" required />
+    <main class="login-page">
+      <section class="brand-panel">
+        <div class="brand-emblem">
+          <img src="/assets/paoli_logo.png" alt="Paoli Group logo" />
+        </div>
+        <p class="brand-name">Paoli Group</p>
+      </section>
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter password" required />
+      <section class="form-panel">
+        <form action="/login" method="POST" class="login-form">
+          <label class="input-label" for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            class="text-input"
+            autocomplete="username"
+            required
+          />
 
-      <button type="submit">Login</button>
-    </form>
-    <div class="password-reset">
-      <p>Changing Password? <a href="restet_password.html">Click Here</a></p>
-    </div>
-   
+          <label class="input-label" for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="text-input"
+            autocomplete="current-password"
+            required
+          />
 
-</body>
+          <div class="form-actions">
+            <a class="forgot-link" href="restet_password.html">Forgot Password?</a>
+            <button type="submit" class="submit-button">Log In</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="page-footer">
+      <div class="footer-left">
+        <div class="footer-logo">
+          <img src="/assets/paoli_logo.png" alt="Paoli Group logo" />
+        </div>
+        <span class="footer-text">Paoli Group</span>
+      </div>
+      <div class="footer-right">© 2025 Paoli Group. All rights reserved.</div>
+    </footer>
+  </body>
 </html>

@@ -42,7 +42,7 @@ input[type="password"] {
 button {
   width: 100%;
   padding: 10px;
-  background: #4CAF50;
+  background: #080f5a;
   border: none;
   color: white;
   font-size: 16px;
@@ -68,4 +68,21 @@ button:hover {
 
 .message a:hover {
   text-decoration: underline;
+}
+
+.back-button {
+  display: inline-block;
+  margin-top: 18px;
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  background: #080f5a;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-button:hover {
+  background: #0b1670;
 }

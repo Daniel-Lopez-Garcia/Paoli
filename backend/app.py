@@ -17,7 +17,9 @@ DB_CONFIG = {
     "cursorclass": pymysql.cursors.DictCursor,
 }
 
-FRONT_END_DIR = Path(__file__).resolve().parents[1] / "front_end"
+BASE_DIR = Path(__file__).resolve().parents[1]
+FRONT_END_DIR = BASE_DIR / "front_end"
+STYLE_DIR = BASE_DIR / "style"
 
 app = Flask(__name__)
 
@@ -81,6 +83,14 @@ def serve_frontend(asset_path: str):
 @app.get("/")
 def root():
     return serve_frontend("log_in.html")
+
+
+@app.get("/style/<path:asset_path>")
+def style_assets(asset_path):
+    if not STYLE_DIR.exists():
+        return Response("Style directory missing", status=500, mimetype="text/plain")
+    
+    return send_from_directory(STYLE_DIR, asset_path)
 
 
 @app.get("/<path:asset_path>")
