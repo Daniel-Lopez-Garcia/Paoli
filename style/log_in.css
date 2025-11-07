@@ -1,18 +1,14 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* Body/Root */
 body {
   font-family: "Helvetica Neue", "Segoe UI", Arial, sans-serif;
   color: #0a0a0a;
   background: #fdfdfd;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 100svh; /* better on iOS than 100vh */
 }
 
+/* Header untouched except you can reduce side padding on narrow */
 .page-header {
   position: relative;
   height: 90px;
@@ -21,59 +17,44 @@ body {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0 40px;
+  padding: 0 clamp(16px, 4vw, 40px);
 }
 
-.menu-toggle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.menu-toggle span {
-  width: 18px;
-  height: 2px;
-  background: #fff;
-  display: block;
-}
-
+/* Main layout */
 .login-page {
   flex: 1;
   display: flex;
+  flex-wrap: wrap;              /* <- allow wrapping */
   justify-content: center;
   align-items: center;
-  gap: 80px;
-  padding: 60px 40px 80px;
+  gap: clamp(24px, 6vw, 80px);  /* <- fluid gap */
+  padding: clamp(24px, 5vw, 60px) clamp(16px, 4vw, 40px) clamp(32px, 7vw, 80px);
 }
 
+/* Panels */
 .brand-panel,
 .form-panel {
   display: flex;
   flex-direction: column;
+  flex: 1 1 320px;              /* <- grow/shrink, base ~320px */
+  max-width: 520px;             /* <- prevent stretching too wide side-by-side */
 }
 
+/* Brand/logo */
 .brand-panel {
   align-items: center;
   text-align: center;
 }
 
 .brand-emblem {
-  width: 340px;
-  height: 340px;
+  width: clamp(180px, 30vw, 340px);
+  aspect-ratio: 1 / 1;          /* <- perfect circle that scales */
   border-radius: 50%;
   border: 6px solid #222;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 32px;
+  margin-bottom: clamp(16px, 3vw, 32px);
   background: #fff;
   overflow: hidden;
 }
@@ -85,13 +66,14 @@ body {
 }
 
 .brand-name {
-  font-size: 32px;
+  font-size: clamp(22px, 3.2vw, 32px);
   letter-spacing: 0.04em;
   color: #111;
 }
 
+/* Form panel */
 .form-panel {
-  width: 360px;
+  width: min(100%, 420px);      /* <- fluid instead of fixed 360px */
 }
 
 .login-form {
@@ -110,7 +92,7 @@ body {
   border-bottom: 1px solid #a0a0a0;
   padding: 6px 0 12px;
   font-size: 16px;
-  margin-bottom: 36px;
+  margin-bottom: clamp(20px, 4vw, 36px);
   background: transparent;
 }
 
@@ -144,6 +126,7 @@ body {
   cursor: pointer;
   box-shadow: 0 10px 18px rgba(8, 15, 90, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  touch-action: manipulation;
 }
 
 .submit-button:hover {
@@ -151,12 +134,15 @@ body {
   box-shadow: 0 14px 22px rgba(8, 15, 90, 0.45);
 }
 
+/* Footer */
 .page-footer {
   border-top: 1px solid #d8d8d8;
-  padding: 20px 40px;
+  padding: 20px clamp(16px, 4vw, 40px);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;              /* <- avoids overflow on small widths */
+  gap: 8px;
   font-size: 14px;
   color: #4a4a4a;
 }
@@ -191,35 +177,20 @@ body {
   font-size: 13px;
 }
 
+/* Breakpoints (kept, but lighter because clamp() handles a lot) */
 @media (max-width: 1024px) {
   .login-page {
-    flex-direction: column;
-    gap: 50px;
+    /* columns will naturally stack via flex-wrap when needed */
   }
 }
 
 @media (max-width: 600px) {
-  .login-page {
-    padding: 40px 20px 60px;
-  }
+  .page-header { height: 76px; }
+  .form-actions { align-items: stretch; } /* make button full width if you prefer */
+  .submit-button { align-self: stretch; } /* optional: full-width button on phones */
+}
 
-  .brand-emblem {
-    width: 260px;
-    height: 260px;
-  }
-
-  .brand-name {
-    font-size: 26px;
-  }
-
-  .form-panel {
-    width: 100%;
-    max-width: 360px;
-  }
-
-  .page-footer {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
-  }
+/* Short-screen comfort (e.g., landscape phones, small laptops) */
+@media (max-height: 700px) {
+  .brand-emblem { width: clamp(140px, 22vw, 260px); }
 }
