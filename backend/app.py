@@ -12,7 +12,7 @@ PORT = int(os.getenv("PORT", "3000"))
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "user": os.getenv("DB_USER", "root"),
-    "password": os.getenv("DB_PASSWORD", ""),
+    "password": os.getenv("DB_PASSWORD", "lexmarks07"),
     "database": os.getenv("DB_NAME", "palogroup"),
     "cursorclass": pymysql.cursors.DictCursor,
 }
@@ -54,6 +54,57 @@ def render_login_result(message: str) -> str:
         '<a href="/log_in.html">Back to login</a>'
         "</body></html>"
     )
+
+def change_password(email: str, new_password: str) -> bool:
+    if not email or not new_password:
+        return False
+
+    hashed = hashlib.sha256(new_password.encode("utf-8")).hexdigest()
+    query = "UPDATE user SET password_hash = %s WHERE email = %s"
+
+    with get_db_connection() as connection:
+        with connection.cursor() as cursor:
+            cursor.execute(query, (hashed, email))
+        connection.commit()  
+        
+        return cursor.rowcount == 1
+from flask import redirect, url_for
+
+@app.post("/reset-password")
+def reset_password():
+    email = request.form.get("email")          
+    old_pw = request.form.get("current_password")  
+    pw1   = request.form.get("password")
+    pw2   = request.form.get("confirm_password")
+
+    # Check for missing inputs
+    if not email or not old_pw or not pw1 or not pw2:
+         return Response("Missing Fields", status=401, mimetype="text/plain")
+
+    # Make sure new passwords match
+    if pw1 != pw2:
+         return Response("Passwords Do Not Matc.", status=401, mimetype="text/plain")
+
+    # Verify current password first
+    try:
+        valid_old = verify_user(email, old_pw)
+        if not valid_old:
+            return Response("Credentials are Incorrect.", status=401, mimetype="text/plain")
+
+        # Proceed with password change
+        changed = change_password(email, pw1)
+
+    except Exception as exc:
+        app.logger.error("Reset error: %s", exc, exc_info=True)
+        return Response("Server Error.", status=401, mimetype="text/plain")
+
+    # Check if password was actually changed
+    if not changed:
+        return Response("Credential are Incorrect.", status=401, mimetype="text/plain")
+
+    # Success → redirect to login
+    return redirect("/log_in.html?reset=ok", code=302)
+
 
 
 @app.post("/login")
